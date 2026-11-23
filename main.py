@@ -10,12 +10,17 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "news.png")
 
 
+MAX_BYTES = 1_048_576  # competition cap: image at most 1 MiB
+
+
 def main():
+    size = os.path.getsize(SRC)
+    assert size <= MAX_BYTES, f"news.png is {size} bytes, over the 1 MiB cap"
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     dst = os.path.join(out_dir, "entry.png")
     shutil.copyfile(SRC, dst)
-    print(f"Wrote {dst}")
+    print(f"Wrote {dst} ({size} bytes)")
 
 
 if __name__ == "__main__":
